@@ -1,6 +1,8 @@
 package com.tecsup.petclinic.services;
 
+import com.tecsup.petclinic.entities.Pet;
 import com.tecsup.petclinic.entities.Vet;
+import com.tecsup.petclinic.exception.PetNotFoundException;
 import com.tecsup.petclinic.exception.VetNotFoundException;
 
 import java.util.List;
@@ -18,6 +20,8 @@ public interface VetService {
     List<Vet> findByFirstName(String firstname);
 
     Vet update (Vet vet);
+
+    Vet findById(Integer id) throws VetNotFoundException;
 
 
 }
