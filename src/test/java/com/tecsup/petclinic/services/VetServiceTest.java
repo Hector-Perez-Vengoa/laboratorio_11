@@ -5,7 +5,9 @@ import lombok.extern.slf4j.Slf4j;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
-
+import com.tecsup.petclinic.exception.VetNotFoundException;
+import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.junit.jupiter.api.Assertions.fail;
 import static org.junit.jupiter.api.Assertions.*;
 
 @SpringBootTest
@@ -19,7 +21,7 @@ public class VetServiceTest {
      * Test para crear veterinarios
      */
     @Test
-    public void testCreateVeterinarios() {
+    public void testCreateVet() {
 
         String FIRST_NAME_1 = "Juan";
         String LAST_NAME_1 = "Perez";
@@ -130,4 +132,37 @@ public class VetServiceTest {
         assertEquals(UP_FIRST_NAME, upgradePet.getFirstName());
         assertEquals(UP_LAST_NAME, upgradePet.getLastName());
     }
+    @Test
+    public void testFindByFirstName() {
+
+        String NAME_EXPECTED = "James";
+
+        Integer ID = 1;
+
+        Vet vet = null;
+
+        try {
+            vet = this.vetService.findById(ID);
+        } catch (VetNotFoundException e) {
+            fail(e.getMessage());
+        }
+        assertEquals(NAME_EXPECTED, vet.getFirstName());
+    }
+
+    @Test
+    public void testFindByLastName() {
+        String LAST_NAME_EXPECTED = "Carter";
+        Integer ID = 1;
+
+        Vet vet = null;
+
+        try{
+            vet = this.vetService.findById(ID);
+        } catch (VetNotFoundException e) {
+            fail(e.getMessage());
+        }
+        assertEquals(LAST_NAME_EXPECTED, vet.getLastName());
+    }
+
+
 }
