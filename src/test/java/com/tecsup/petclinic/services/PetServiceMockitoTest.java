@@ -1,39 +1,43 @@
 package com.tecsup.petclinic.services;
 
-import static org.junit.jupiter.api.Assertions.assertEquals;
-import static org.junit.jupiter.api.Assertions.assertNotNull;
-import static org.junit.jupiter.api.Assertions.assertTrue;
-import static org.junit.jupiter.api.Assertions.fail;
-
-import java.util.List;
-import java.util.Optional;
-
-import org.junit.jupiter.api.BeforeEach;
-import org.junit.jupiter.api.Test;
-import org.junit.jupiter.api.extension.ExtendWith;
-import org.mockito.Mock;
-import org.mockito.Mockito;
-import org.mockito.junit.jupiter.MockitoExtension;
 
 import com.tecsup.petclinic.entities.Pet;
 import com.tecsup.petclinic.exception.PetNotFoundException;
 import com.tecsup.petclinic.repositories.PetRepository;
 import com.tecsup.petclinic.util.TObjectCreator;
-
 import lombok.extern.slf4j.Slf4j;
+import org.junit.jupiter.api.BeforeEach;
+import org.junit.jupiter.api.Test;
+import org.junit.jupiter.api.extension.ExtendWith;
+import org.mockito.InjectMocks;
+import org.mockito.Mock;
+import org.mockito.Mockito;
+import org.mockito.MockitoAnnotations;
+import org.mockito.junit.jupiter.MockitoExtension;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.boot.test.context.SpringBootTest;
+import org.springframework.boot.test.mock.mockito.MockBean;
+
+import java.util.List;
+import java.util.Optional;
+
+import static org.junit.jupiter.api.Assertions.*;
 
 @Slf4j
 @ExtendWith(MockitoExtension.class)
+// @SpringBootTest
 public class PetServiceMockitoTest {
 
-    private PetService petService;
+    //@Autowired
+    @InjectMocks
+    private PetServiceImpl petService;
 
-    @Mock 
+    @Mock
     private PetRepository repository;
 
     @BeforeEach
     void setUp() {
-        this.petService = new PetServiceImpl(this.repository);
+        //this.petService = new PetServiceImpl(this.repository);
     }
 
     /**
@@ -42,14 +46,12 @@ public class PetServiceMockitoTest {
     @Test
     public void testFindPetById() {
 
-        //Pet petExpected = TObjectCreator.getPet();
-        Pet petExpected = new Pet(1,"Leo",1,1, null);
+        Pet petExpected = TObjectCreator.getPet();
 
-        Mockito.when(this.repository.findById(1))
+        Mockito.when(this.repository.findById(petExpected.getId()))
                 .thenReturn((Optional.of(petExpected)));
-
         try {
-            petExpected = this.petService.findById(1);
+            petExpected = this.petService.findById(petExpected.getId());
         } catch (PetNotFoundException e) {
             fail(e.getMessage());
         }
@@ -124,6 +126,10 @@ public class PetServiceMockitoTest {
     @Test
     public void testCreatePet() {
 
+        String PET_NAME = "Ponky";
+        int OWNER_ID = 1;
+        int TYPE_ID = 1;
+
         Pet newPet = TObjectCreator.newPet();
         Pet newCreatePet = TObjectCreator.newPetCreated();
 
@@ -170,11 +176,9 @@ public class PetServiceMockitoTest {
         petCreated.setOwnerId(UP_OWNER_ID);
         petCreated.setTypeId(UP_TYPE_ID);
 
-        Pet newUpdate = petCreated;
-        
         // Create
         Mockito.when(this.repository.save(petCreated))
-                .thenReturn(newUpdate);
+                .thenReturn(petCreated);
 
         // Execute update
         Pet upgradePet = this.petService.update(petCreated);
