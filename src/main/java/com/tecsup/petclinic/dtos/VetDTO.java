@@ -12,8 +12,8 @@ public class VetDTO {
 
     private int id;
 
-    private String fristname;
+    private String firstName;
 
-    private String lastname;
+    private String lastName;
 
 }
