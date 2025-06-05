@@ -148,7 +148,6 @@ public class VetServiceTest {
         }
         assertEquals(NAME_EXPECTED, vet.getFirstName());
     }
-
     @Test
     public void testFindByLastName() {
         String LAST_NAME_EXPECTED = "Carter";
@@ -163,6 +162,4 @@ public class VetServiceTest {
         }
         assertEquals(LAST_NAME_EXPECTED, vet.getLastName());
     }
-
-
 }
